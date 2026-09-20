@@ -734,6 +734,8 @@ class AdminModel {
       };
     }
   }
+
+  //Checking if the user is logged in or not
 }
 
 module.exports = new AdminModel();
