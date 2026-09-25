@@ -49,7 +49,7 @@ let middleware = {
         if (pathData[1] === "uploads") {
             return callback();
         }
-        let api_key = (req.headers['api_key'] != undefined && req.headers['api_key'] != "") ? req.headers["api_key"] : '';
+        let api_key = (req.headers['x-api-key'] != undefined && req.headers['x-api-key'] != "") ? req.headers["x-api-key"] : '';
         if (api_key != "") {
             try {
                 if (api_key == process.env.API_KEY) {
@@ -75,7 +75,8 @@ let middleware = {
     },
 
     validateHeaderToken: function (req, res, callback) {
-        let headerToken = (req.headers['jwt_token'] && req.headers['jwt_token'] !== "") ? req.headers['jwt_token'] : '';
+        let headerToken = (req.headers['authorization'] && req.headers['authorization'] !== "") ? req.headers['authorization'] : '';
+        console.log("Header Token", headerToken)
         let pathData = req.path.split("/");
 
         if (pathData[1] === "uploads") {

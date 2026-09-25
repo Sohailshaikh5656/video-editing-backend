@@ -43,6 +43,34 @@ const reviewsValidation = Joi.object({
     is_retained : Joi.boolean().optional(),
     message : Joi.string().required()
 })
+
+
+const journalCategoryValidation = Joi.object({
+    name : Joi.string().min(3).required(),  
+})
+const journalValidation = Joi.object({
+    category_id : Joi.number().required(),
+    time : Joi.string().required(),
+    time_type : Joi.string().required(),
+    title : Joi.string().min(3).required(),
+    description : Joi.string().required(),
+    image_url : Joi.string().required(),
+    text : Joi.string().required(),
+})
+
+const reelsCategoryValidation = Joi.object({
+    name : Joi.string().min(3).required(),  
+})
+const reelsValidation = Joi.object({
+    name : Joi.string().min(3).required(),
+    reel_url : Joi.string().required(),
+    thumbnail_url : Joi.string().optional(),
+    category_id : Joi.number().required(),
+    our_role : Joi.string().required(),
+    start_date : Joi.string().required(),
+    end_date : Joi.string().required(),
+    description : Joi.string().required(),
+})
 module.exports = {
     adminValidation,
     createVedioTagValidation,
@@ -50,4 +78,8 @@ module.exports = {
     vediosValidation,
     processValidation,
     reviewsValidation,
+    journalCategoryValidation,
+    journalValidation,
+    reelsValidation,
+    reelsCategoryValidation
 }
