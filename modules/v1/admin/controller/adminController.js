@@ -290,10 +290,11 @@ class AdminController {
                 requestData.search = req.params.search
             }
 
-            let message = await adminModel.getReviews(requestData)
+            let message = await adminModel.getReview(requestData)
             return middleware.sendResponse(req, res, message);
    
         }catch(error){
+            console.log("Error : ", error)
             return middleware.sendResponse(req, res, {error:error?.message || error})
         }
     }
@@ -326,6 +327,252 @@ class AdminController {
             console.log("error : ", error)
             return middleware.sendResponse(req, res, { error: error.message || error});
             
+        }
+    }
+
+    //Journal Category
+
+    async createJournalCategory(req, res){
+        try{
+            let requestData = req.body;
+            let journalCategoryValidation = validationRule.journalCategoryValidation
+            let {error, value} = journalCategoryValidation.validate(requestData)
+            if(error){
+                return middleware.sendResponse(req, res, { error: error.details[0].message });
+            }
+            let message = await adminModel.createJournalCategory(requestData)   
+            return middleware.sendResponse(req, res, message);
+   
+        }catch(error){
+            return middleware.sendResponse(req, res, { error: error.message || error});
+        }
+    }
+
+    async getJournalCategory(req, res){
+        try{
+            let requestData = {}
+            if(req.params?.id){
+                requestData.id = req.params.id
+            }
+            if(req.params?.search){
+                requestData.search = req.params.search
+            }
+
+            let message = await adminModel.getJournalCategory(requestData)
+            return middleware.sendResponse(req, res, message);
+        }catch(error){
+            return middleware.sendResponse(req, res, {error:error?.message || error})
+        }
+    }
+
+    async updateJournalCategory(req, res){
+        try{
+            let requestData = req.body;
+            let journalCategoryValidation = validationRule.journalCategoryValidation
+            let {error, value} = journalCategoryValidation.validate(requestData)
+            if(error){
+                return middleware.sendResponse(req, res, { error: error.details[0].message });
+            }
+
+            requestData.id = req.params.id
+            let message = await adminModel.updateJournalCategory(requestData)
+            return middleware.sendResponse(req, res, message);
+        }catch(error){
+            return middleware.sendResponse(req, res, { error: error.message || error});
+        }
+    }
+
+    async deleteJournalCategory(req, res){
+        try{
+            let requestData = {}
+            requestData.id = req.params.id
+            let message = await adminModel.deleteJournalCategory(requestData)
+            return middleware.sendResponse(req, res, message)
+        }catch(error){
+            return middleware.sendResponse(req, res, { error: error.message || error});
+        }
+    }
+
+    //Journal
+
+    async createJournal(req, res){
+        try{
+            let requestData = req.body;
+            let journalValidation = validationRule.journalValidation
+            let {error, value} = journalValidation.validate(requestData)
+            if(error){
+                return middleware.sendResponse(req, res, { error: error.details[0].message });
+            }
+
+            let message = await adminModel.createJournal(requestData)
+            return middleware.sendResponse(req, res, message);
+        }catch(error){
+            return middleware.sendResponse(req, res, { error: error.message || error});
+        }
+    }
+
+    async getJournal(req, res){
+        try{
+            let requestData = {}
+            if(req.params?.id){
+                requestData.id = req.params.id
+            }
+            if(req.params?.search){
+                requestData.search = req.params.search
+            }
+
+            let message = await adminModel.getJournal(requestData)
+            return middleware.sendResponse(req, res, message);
+        }catch(error){
+            return middleware.sendResponse(req, res, { error: error.message || error});
+        }
+    }
+
+    async updateJournal(req, res){
+        try{
+            let requestData = req.body;
+            let journalValidation = validationRule.journalValidation
+            let {error, value} = journalValidation.validate(requestData)
+            if(error){
+                return middleware.sendResponse(req, res, { error: error.details[0].message });
+            }
+            requestData.id = req.params.id
+            let message = await adminModel.updateJournal(requestData)
+            return middleware.sendResponse(req, res, message);
+        }catch(error){
+            return middleware.sendResponse(req, res, { error: error.message || error});
+        }
+    }
+
+    async deleteJournal(req, res){
+        try{
+            let requestData = {}
+            requestData.id = req.params.id
+            let message = await adminModel.deleteJournal(requestData)
+            return middleware.sendResponse(req, res, message)
+        }catch(error){
+            return middleware.sendResponse(req, res, { error: error.message || error});
+        }
+    }
+
+    //Reels Category
+
+    async createReelsCategory(req, res){
+        try{
+            let requestData = req.body;
+            let reelsCategoryValidation = validationRule.reelsCategoryValidation
+            let {error, value} = reelsCategoryValidation.validate(requestData)
+            if(error){
+                return middleware.sendResponse(req, res, { error: error.details[0].message });
+            }
+
+            let message = await adminModel.createReelsCategory(requestData)
+            return middleware.sendResponse(req, res, message);
+        }catch(error){
+            return middleware.sendResponse(req, res, { error: error.message || error});
+        }
+    }
+
+    async getReelsCategory(req, res){
+        try{
+            let requestData = {}
+            if(req.params?.id){
+                requestData.id = req.params.id
+            }
+            if(req.params?.search){
+                requestData.search = req.params.search
+            }
+            let message = await adminModel.getReelsCategory(requestData)
+            return middleware.sendResponse(req, res, message);
+        }catch(error){
+            return middleware.sendResponse(req, res, { error: error.message || error});
+        }
+    }
+
+    async updateReelsCategory(req, res){
+        try{
+            let requestData = req.body;
+            let reelsCategoryValidation = validationRule.reelsCategoryValidation
+            let {error, value} = reelsCategoryValidation.validate(requestData)
+            if(error){
+                return middleware.sendResponse(req, res, { error: error.details[0].message });
+            }
+            requestData.id = req.params.id
+            let message = await adminModel.updateReelsCategory(requestData)
+            return middleware.sendResponse(req, res, message);
+        }catch(error){
+            return middleware.sendResponse(req, res, { error: error.message || error});
+        }
+    }
+
+    async deleteReelsCategory(req, res){
+        try{
+            let requestData = {}
+            requestData.id = req.params.id
+            let message = await adminModel.deleteReelsCategory(requestData)
+            return middleware.sendResponse(req, res, message)
+        }catch(error){
+            return middleware.sendResponse(req, res, { error: error.message || error});
+        }
+    }
+
+    async createReels(req, res){
+        try{
+            let requestData = req.body;
+            let reelsValidation = validationRule.reelsValidation
+            let {error, value} = reelsValidation.validate(requestData)
+            if(error){
+                return middleware.sendResponse(req, res, { error: error.details[0].message });
+            }
+            let message = await adminModel.createReels(requestData)
+            return middleware.sendResponse(req, res, message);
+
+        }catch(error){
+            return middleware.sendResponse(req, res, { error: error.message || error});
+        }
+    }
+
+    async getReels(req, res){
+        try{
+            let requestData = {}
+            if(req.params?.id){
+                requestData.id = req.params.id
+            }
+            if(req.params?.search){
+                requestData.search = req.params.search
+            }
+            let message = await adminModel.getReels(requestData)
+            return middleware.sendResponse(req, res, message);
+        }catch(error){
+            return middleware.sendResponse(req, res, { error: error.message || error});
+        }
+    }
+
+    async updateReels(req, res){
+        try{
+            let requestData = req.body;
+            let reelsValidation = validationRule.reelsValidation
+            let {error, value} = reelsValidation.validate(requestData)
+            if(error){
+                return middleware.sendResponse(req, res, { error: error.details[0].message });
+            }
+            requestData.id = req.params.id
+            let message = await adminModel.updateReels(requestData)
+            return middleware.sendResponse(req, res, message);
+        }catch(error){
+            return middleware.sendResponse(req, res, { error: error.message || error});
+
+        }
+    }
+
+    async deleteReels(req, res){
+        try{
+            let requestData = {}
+            requestData.id = req.params.id
+            let message = await adminModel.deleteReels(requestData)
+            return middleware.sendResponse(req, res, message)
+        }catch(error){
+            return middleware.sendResponse(req, res, { error: error.message || error});
         }
     }
 }
