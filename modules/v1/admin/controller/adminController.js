@@ -167,12 +167,16 @@ class AdminController {
     async updateVedios(req, res){
         try{
             let requestData = req.body
+            console.log("Body : ", requestData)
+            
             let vedioValidation = validationRule.vediosValidation
             let {error, value} = vedioValidation.validate(requestData)
             if(error){
+                console.log("Naa Error Idhar Hai",error)
                 return middleware.sendResponse(req, res, { error: error.details[0].message });
             }
             requestData.id = req.params.id
+            console.log("Body 2: ", requestData)
             let message = await adminModel.updateVedios(requestData)   
             return middleware.sendResponse(req, res, message);
    
@@ -573,6 +577,16 @@ class AdminController {
             return middleware.sendResponse(req, res, message)
         }catch(error){
             return middleware.sendResponse(req, res, { error: error.message || error});
+        }
+    }
+
+    async getInquiry(req, res){
+        try{
+            let message = await adminModel.getInquiry()
+            return middleware.sendResponse(req, res, message)
+        }catch(error){
+            console.log("Lund Error :",error)
+            return middleware.sendResponse(req, res, { error : error.message || error })
         }
     }
 }

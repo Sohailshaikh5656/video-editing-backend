@@ -115,7 +115,7 @@ class AdminModel {
       } else if (requestData.search) {
         query += ` AND tags LIKE '%${requestData.search}%'`;
       }
-      query += " ORDER BY id DESC"
+      query += " ORDER BY id DESC";
       let [result] = await database.query(query);
       if (result.length <= 0) {
         return {
@@ -362,6 +362,8 @@ class AdminModel {
         description: requestData.description,
       };
 
+      console.log("Data : ", requestData);
+
       if (requestData.views) {
         vedios.views = requestData.views;
       }
@@ -489,18 +491,18 @@ class AdminModel {
     }
   }
 
-  async getProcess(requestData){
-    try{
-      let query = `SELECT * FROM tbl_process WHERE is_deleted = 0`
-      if(requestData.id){
-        query += ` AND id = ${requestData.id}`
-      }else if(requestData.search){
-        query += ` AND title LIKE '%${requestData.search}%'`
+  async getProcess(requestData) {
+    try {
+      let query = `SELECT * FROM tbl_process WHERE is_deleted = 0`;
+      if (requestData.id) {
+        query += ` AND id = ${requestData.id}`;
+      } else if (requestData.search) {
+        query += ` AND title LIKE '%${requestData.search}%'`;
       }
-      query += " ORDER BY ID DESC"
+      query += " ORDER BY ID DESC";
 
-      let [result] = await database.query(query)
-      if(result.length <=0){
+      let [result] = await database.query(query);
+      if (result.length <= 0) {
         return {
           code: responseCode.DATA_NOT_FOUND,
           keyword: "no_process_found",
@@ -508,12 +510,12 @@ class AdminModel {
         };
       }
 
-    return {
-      code: responseCode.SUCCESS,
-      keyword: "process_fetched_successfully",
-      data: requestData.id ? result[0] : result, 
-    };
-    }catch(error){
+      return {
+        code: responseCode.SUCCESS,
+        keyword: "process_fetched_successfully",
+        data: requestData.id ? result[0] : result,
+      };
+    } catch (error) {
       return {
         code: responseCode.OPERATION_FAILED,
         keyword: "something_went_wrong",
@@ -522,7 +524,7 @@ class AdminModel {
     }
   }
 
-  async updateProcess(requestData){
+  async updateProcess(requestData) {
     try {
       let data = {
         title: requestData.title,
@@ -595,13 +597,11 @@ class AdminModel {
         last_name: requestData.last_name,
         message: requestData.message,
         rating: requestData.rating,
-        occupation : requestData.occupation,
-        state : requestData.state,
-        country : requestData.country,
-        role : requestData.role,
+        occupation: requestData.occupation,
+        state: requestData.state,
+        country: requestData.country,
+        role: requestData.role,
       };
-
-
 
       if (requestData.retained) {
         data.retained = requestData.retained;
@@ -632,18 +632,18 @@ class AdminModel {
     }
   }
 
-  async getReview(requestData){
-    try{
-      let query = `SELECT * FROM tbl_testimonials WHERE is_deleted = 0`
-      if(requestData.id){
-        query += ` AND id = ${requestData.id}`
-      }else if(requestData.search){
-        query += ` AND (first_name LIKE '%${requestData.search}%' OR last_name LIKE '%${requestData.search}%')`
+  async getReview(requestData) {
+    try {
+      let query = `SELECT * FROM tbl_testimonials WHERE is_deleted = 0`;
+      if (requestData.id) {
+        query += ` AND id = ${requestData.id}`;
+      } else if (requestData.search) {
+        query += ` AND (first_name LIKE '%${requestData.search}%' OR last_name LIKE '%${requestData.search}%')`;
       }
-      query += " ORDER BY id DESC"
+      query += " ORDER BY id DESC";
 
-      let [result] = await database.query(query)
-      if(result.length <=0){
+      let [result] = await database.query(query);
+      if (result.length <= 0) {
         return {
           code: responseCode.NO_DATA_FOUND,
           keyword: "no_testimonials_found",
@@ -651,12 +651,12 @@ class AdminModel {
         };
       }
 
-    return {
-      code: responseCode.SUCCESS,
-      keyword: "testimonials_fetched_successfully",
-      data: requestData.id ? result[0] : result, 
-    };
-    }catch(error){
+      return {
+        code: responseCode.SUCCESS,
+        keyword: "testimonials_fetched_successfully",
+        data: requestData.id ? result[0] : result,
+      };
+    } catch (error) {
       return {
         code: responseCode.OPERATION_FAILED,
         keyword: "something_went_wrong",
@@ -665,20 +665,18 @@ class AdminModel {
     }
   }
 
-  async updateReview(requestData){
+  async updateReview(requestData) {
     try {
       let data = {
         first_name: requestData.first_name,
         last_name: requestData.last_name,
         message: requestData.message,
         rating: requestData.rating,
-        occupation : requestData.occupation,
-        state : requestData.state,
-        country : requestData.country,
-        role : requestData.role,
+        occupation: requestData.occupation,
+        state: requestData.state,
+        country: requestData.country,
+        role: requestData.role,
       };
-
-
 
       if (requestData.retained) {
         data.retained = requestData.retained;
@@ -737,17 +735,17 @@ class AdminModel {
   }
 
   async createJournalCategory(requestData) {
-    try{
+    try {
       let data = {
         name: requestData.name,
-      }
+      };
 
       let [result] = await database.query(
         `INSERT INTO tbl_journal_category SET ?`,
         data,
-      );  
+      );
 
-      if(result.affectedRows <= 0){
+      if (result.affectedRows <= 0) {
         return {
           code: responseCode.OPERATION_FAILED,
           keyword: "unable_to_create_journal_category",
@@ -759,7 +757,7 @@ class AdminModel {
         keyword: "journal_category_created_successfully",
         data: null,
       };
-    }catch(error){
+    } catch (error) {
       return {
         code: responseCode.OPERATION_FAILED,
         keyword: "something_went_wrong",
@@ -768,15 +766,14 @@ class AdminModel {
     }
   }
 
-
-  async getJournalCategory(requestData){
-    try{
-      let query = `SELECT * FROM tbl_journal_category WHERE is_deleted = 0`
-      if(requestData.id){
-        query += ` AND id = ${requestData.id}`
+  async getJournalCategory(requestData) {
+    try {
+      let query = `SELECT * FROM tbl_journal_category WHERE is_deleted = 0`;
+      if (requestData.id) {
+        query += ` AND id = ${requestData.id}`;
       }
-      if(requestData.search){
-        query += ` AND name LIKE '%${requestData.search}%'`
+      if (requestData.search) {
+        query += ` AND name LIKE '%${requestData.search}%'`;
       }
 
       let [result] = await database.query(query);
@@ -785,21 +782,20 @@ class AdminModel {
         keyword: "journal_category_fetched_successfully",
         data: result,
       };
-    }catch(error){
+    } catch (error) {
       return {
         code: responseCode.OPERATION_FAILED,
         keyword: "something_went_wrong",
         data: error,
-      }
+      };
     }
   }
 
-
-  async updateJournalCategory(requestData){
-    try{
+  async updateJournalCategory(requestData) {
+    try {
       let data = {
         name: requestData.name,
-      }
+      };
 
       let [result] = await database.query(
         `UPDATE tbl_journal_category SET ? WHERE id = ?`,
@@ -810,17 +806,17 @@ class AdminModel {
         keyword: "journal_category_updated_successfully",
         data: null,
       };
-    }catch(error){
+    } catch (error) {
       return {
         code: responseCode.OPERATION_FAILED,
         keyword: "something_went_wrong",
         data: error,
-      }
+      };
     }
   }
 
-  async deleteJournalCategory(requestData){
-    try{
+  async deleteJournalCategory(requestData) {
+    try {
       let [result] = await database.query(
         `UPDATE tbl_journal_category SET is_deleted = 1 WHERE id = ?`,
         [requestData.id],
@@ -830,7 +826,7 @@ class AdminModel {
         keyword: "journal_category_deleted_successfully",
         data: null,
       };
-    }catch(error){
+    } catch (error) {
       return {
         code: responseCode.OPERATION_FAILED,
         keyword: "something_went_wrong",
@@ -839,10 +835,10 @@ class AdminModel {
     }
   }
 
-  //Journal 
+  //Journal
 
-  async createJournal(requestData){
-    try{
+  async createJournal(requestData) {
+    try {
       let data = {
         category_id: requestData.category_id,
         time: requestData.time,
@@ -851,14 +847,14 @@ class AdminModel {
         description: requestData.description,
         image_url: requestData.image_url,
         text: requestData.text,
-      }
+      };
 
       let [result] = await database.query(
         `INSERT INTO tbl_journal SET ?`,
         data,
       );
 
-      if(result.affectedRows <= 0){
+      if (result.affectedRows <= 0) {
         return {
           code: responseCode.OPERATION_FAILED,
           keyword: "unable_to_create_journal",
@@ -871,7 +867,7 @@ class AdminModel {
         keyword: "journal_created_successfully",
         data: null,
       };
-    }catch(error){
+    } catch (error) {
       return {
         code: responseCode.OPERATION_FAILED,
         keyword: "something_went_wrong",
@@ -880,15 +876,14 @@ class AdminModel {
     }
   }
 
-
-  async getJournal(requestData){
-    try{
-      let query = `SELECT * FROM tbl_journal WHERE is_deleted = 0`
-      if(requestData.id){
-        query += ` AND id = ${requestData.id}`
+  async getJournal(requestData) {
+    try {
+      let query = `SELECT * FROM tbl_journal WHERE is_deleted = 0`;
+      if (requestData.id) {
+        query += ` AND id = ${requestData.id}`;
       }
-      if(requestData.search){
-        query += ` AND title LIKE '%${requestData.search}%'`
+      if (requestData.search) {
+        query += ` AND title LIKE '%${requestData.search}%'`;
       }
       let [result] = await database.query(query);
       return {
@@ -896,17 +891,17 @@ class AdminModel {
         keyword: "journal_fetched_successfully",
         data: result,
       };
-    }catch(error){
+    } catch (error) {
       return {
-        code : responseCode.OPERATION_FAILED,
-        keyword : "something_went_wrong",
-        data : error,
-      }
+        code: responseCode.OPERATION_FAILED,
+        keyword: "something_went_wrong",
+        data: error,
+      };
     }
   }
 
-  async updateJournal(requestData){
-    try{
+  async updateJournal(requestData) {
+    try {
       let data = {
         category_id: requestData.category_id,
         time: requestData.time,
@@ -915,58 +910,58 @@ class AdminModel {
         description: requestData.description,
         image_url: requestData.image_url,
         text: requestData.text,
-      }
+      };
       let [result] = await database.query(
         `UPDATE tbl_journal SET ? WHERE id = ?`,
-        [data, requestData.id]
+        [data, requestData.id],
       );
       return {
         code: responseCode.SUCCESS,
         keyword: "journal_updated_successfully",
         data: null,
       };
-    }catch(error){
+    } catch (error) {
       return {
-        code : responseCode.OPERATION_FAILED,
-        keyword : "something_went_wrong",
-        data : error,
-      }
+        code: responseCode.OPERATION_FAILED,
+        keyword: "something_went_wrong",
+        data: error,
+      };
     }
   }
 
-  async deleteJournal(requestData){
-    try{
+  async deleteJournal(requestData) {
+    try {
       let [result] = await database.query(
         `UPDATE tbl_journal SET is_deleted = 1 WHERE id = ?`,
-        [requestData.id]
+        [requestData.id],
       );
       return {
         code: responseCode.SUCCESS,
         keyword: "journal_deleted_successfully",
         data: null,
       };
-    }catch(error){
+    } catch (error) {
       return {
-        code : responseCode.OPERATION_FAILED,
-        keyword : "something_went_wrong",
-        data : error,
-      }
+        code: responseCode.OPERATION_FAILED,
+        keyword: "something_went_wrong",
+        data: error,
+      };
     }
   }
 
   //Reels Category
 
   async createReelsCategory(requestData) {
-    try{
+    try {
       let data = {
         name: requestData.name,
-      }
+      };
       let [result] = await database.query(
         `INSERT INTO tbl_reel_category SET ?`,
         data,
       );
 
-      if(result.affectedRows <= 0){
+      if (result.affectedRows <= 0) {
         return {
           code: responseCode.OPERATION_FAILED,
           keyword: "unable_to_create_reels_category",
@@ -979,7 +974,7 @@ class AdminModel {
         keyword: "reels_category_created_successfully",
         data: null,
       };
-    }catch(error){
+    } catch (error) {
       return {
         code: responseCode.OPERATION_FAILED,
         keyword: "something_went_wrong",
@@ -988,14 +983,14 @@ class AdminModel {
     }
   }
 
-  async getReelsCategory(requestData){
-    try{
-      let query = `SELECT * FROM tbl_reel_category WHERE is_deleted = 0`
-      if(requestData.id){
-        query += ` AND id = ${requestData.id}`
+  async getReelsCategory(requestData) {
+    try {
+      let query = `SELECT * FROM tbl_reel_category WHERE is_deleted = 0`;
+      if (requestData.id) {
+        query += ` AND id = ${requestData.id}`;
       }
-      if(requestData.search){
-        query += ` AND name LIKE '%${requestData.search}%'`
+      if (requestData.search) {
+        query += ` AND name LIKE '%${requestData.search}%'`;
       }
       let [result] = await database.query(query);
       return {
@@ -1003,20 +998,20 @@ class AdminModel {
         keyword: "reels_category_fetched_successfully",
         data: result,
       };
-    }catch(error){
+    } catch (error) {
       return {
         code: responseCode.OPERATION_FAILED,
         keyword: "something_went_wrong",
         data: error,
-      }
+      };
     }
   }
 
-  async updateReelsCategory(requestData){
-    try{
+  async updateReelsCategory(requestData) {
+    try {
       let data = {
         name: requestData.name,
-      }
+      };
       let [result] = await database.query(
         `UPDATE tbl_reel_category SET ? WHERE id = ?`,
         [data, requestData.id],
@@ -1026,37 +1021,37 @@ class AdminModel {
         keyword: "reels_category_updated_successfully",
         data: null,
       };
-    }catch(error){
+    } catch (error) {
       return {
         code: responseCode.OPERATION_FAILED,
         keyword: "something_went_wrong",
         data: error,
-      }
+      };
     }
   }
 
-  async deleteReelsCategory(requestData){
-    try{
+  async deleteReelsCategory(requestData) {
+    try {
       let [result] = await database.query(
         `UPDATE tbl_reel_category SET is_deleted = 1 WHERE id = ?`,
-        [requestData.id]
+        [requestData.id],
       );
       return {
         code: responseCode.SUCCESS,
         keyword: "reels_category_deleted_successfully",
         data: null,
       };
-    }catch(error){
+    } catch (error) {
       return {
         code: responseCode.OPERATION_FAILED,
         keyword: "something_went_wrong",
         data: error,
-      }
+      };
     }
   }
 
-  async createReels(requestData){
-    try{
+  async createReels(requestData) {
+    try {
       let data = {
         name: requestData.name,
         reel_url: requestData.reel_url,
@@ -1067,12 +1062,9 @@ class AdminModel {
         end_date: requestData.end_date,
         description: requestData.description,
       };
-      let [result] = await database.query(
-        `INSERT INTO tbl_reels SET ?`,
-        data,
-      );
+      let [result] = await database.query(`INSERT INTO tbl_reels SET ?`, data);
 
-      if(result.affectedRows <= 0){
+      if (result.affectedRows <= 0) {
         return {
           code: responseCode.OPERATION_FAILED,
           keyword: "unable_to_create_reels",
@@ -1085,23 +1077,23 @@ class AdminModel {
         keyword: "reels_created_successfully",
         data: null,
       };
-    }catch(error){
+    } catch (error) {
       return {
         code: responseCode.OPERATION_FAILED,
         keyword: "something_went_wrong",
         data: error,
-      }
+      };
     }
   }
 
-  async getReels(requestData){
-    try{
-      let query = `SELECT * FROM tbl_reels WHERE is_deleted = 0`
-      if(requestData.id){
-        query += ` AND id = ${requestData.id}`
+  async getReels(requestData) {
+    try {
+      let query = `SELECT * FROM tbl_reels WHERE is_deleted = 0`;
+      if (requestData.id) {
+        query += ` AND id = ${requestData.id}`;
       }
-      if(requestData.search){
-        query += ` AND name LIKE '%${requestData.search}%'`
+      if (requestData.search) {
+        query += ` AND name LIKE '%${requestData.search}%'`;
       }
       let [result] = await database.query(query);
       return {
@@ -1109,17 +1101,17 @@ class AdminModel {
         keyword: "reels_fetched_successfully",
         data: result,
       };
-    }catch(error){
+    } catch (error) {
       return {
         code: responseCode.OPERATION_FAILED,
         keyword: "something_went_wrong",
         data: error,
-      }
+      };
     }
   }
 
-  async updateReels(requestData){
-    try{
+  async updateReels(requestData) {
+    try {
       let data = {
         name: requestData.name,
         reel_url: requestData.reel_url,
@@ -1133,39 +1125,57 @@ class AdminModel {
       };
       let [result] = await database.query(
         `UPDATE tbl_reels SET ? WHERE id = ?`,
-        [data, requestData.id]
+        [data, requestData.id],
       );
       return {
         code: responseCode.SUCCESS,
         keyword: "reels_updated_successfully",
         data: null,
       };
-    }catch(error){
+    } catch (error) {
       return {
         code: responseCode.OPERATION_FAILED,
         keyword: "something_went_wrong",
         data: error,
-      }
+      };
     }
   }
 
-  async deleteReels(requestData){
-    try{
+  async deleteReels(requestData) {
+    try {
       let [result] = await database.query(
         `UPDATE tbl_reels SET is_deleted = 1 WHERE id = ?`,
-        [requestData.id]
+        [requestData.id],
       );
       return {
         code: responseCode.SUCCESS,
         keyword: "reels_deleted_successfully",
         data: null,
       };
-    }catch(error){
+    } catch (error) {
       return {
         code: responseCode.OPERATION_FAILED,
         keyword: "something_went_wrong",
         data: error,
-      }
+      };
+    }
+  }
+
+  async getInquiry() {
+    try {
+      let query = `SELECT * FROM tbl_contact WHERE is_active = 1 AND is_deleted = 0 ORDER BY id DESC`;
+      let [result] = await database.query(query);
+      return {
+        code: responseCode.SUCCESS,
+        keyword: "reels_fetched_successfully",
+        data: result,
+      };
+    } catch (error) {
+      return {
+        code: responseCode.OPERATION_FAILED,
+        keyword: "something_went_wrong",
+        data: error.message || error,
+      };
     }
   }
 }

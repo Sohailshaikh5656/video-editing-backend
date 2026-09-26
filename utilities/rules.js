@@ -71,6 +71,19 @@ const reelsValidation = Joi.object({
     end_date : Joi.string().required(),
     description : Joi.string().required(),
 })
+
+const inquiryValidation = Joi.object({
+    full_name : Joi.string().required(),
+    email : Joi.string().email().required(),
+    company : Joi.string().required(),
+    timezone : Joi.string().required(),
+    project_type : Joi.string().required(),
+    brief : Joi.string().required(),
+    budget : Joi.string().required(),
+    target_date : Joi.string().required(),
+    footage_url : Joi.string().required(),
+    booking_time : Joi.string().required(),
+})
 module.exports = {
     adminValidation,
     createVedioTagValidation,
@@ -81,5 +94,6 @@ module.exports = {
     journalCategoryValidation,
     journalValidation,
     reelsValidation,
-    reelsCategoryValidation
+    reelsCategoryValidation,
+    inquiryValidation
 }

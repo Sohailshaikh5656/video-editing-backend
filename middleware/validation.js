@@ -82,6 +82,7 @@ let middleware = {
         if (pathData[1] === "uploads") {
             return callback();
         }
+        else if(pathData[1] === "user" || pathData[2] === "user") return callback();
         else if (bypassMethods.indexOf(pathData[3]) === -1 && pathData[1] !== "uploads") {
             if (headerToken !== "") {
                 try {
