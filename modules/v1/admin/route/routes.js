@@ -73,6 +73,8 @@ const adminRoute = (app)=>{
     app.put("/v1/admin/reels/:id",adminInstance.updateReels);
     app.delete("/v1/admin/reels/:id",adminInstance.deleteReels);
 
+    app.get("/v1/admin/inquiry",adminInstance.getInquiry);
+
 }
 
 module.exports = adminRoute
