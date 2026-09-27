@@ -556,6 +556,7 @@ class AdminController {
             let message = await adminModel.changeStatus(requestData)
             return middleware.sendResponse(req, res, message)
         }catch(error){
+            console.log("Error : ", error)
             return middleware.sendResponse(req, res, { error: error.message || error});
         }
     }

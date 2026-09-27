@@ -99,5 +99,6 @@ module.exports = {
     journalValidation,
     reelsValidation,
     reelsCategoryValidation,
-    inquiryValidation
+    inquiryValidation, 
+    statusValidation
 }
