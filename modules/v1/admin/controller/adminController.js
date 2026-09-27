@@ -124,6 +124,23 @@ class AdminController {
         }
     }
 
+    async changeTagsStatus(req, res){
+        try{
+            let requestData = req.body;
+            let validationStatus = validationRule.statusValidation
+            let {error, value} = validationStatus.validate(requestData)
+            if(error){
+                return middleware.sendResponse(req, res, { error: error.message || error});
+            }
+            requestData.table = "	tbl_vedio_tags"
+            requestData.id = req.params.id
+            let message = await adminModel.changeStatus(requestData)
+            return middleware.sendResponse(req, res, message)
+        }catch(error){
+            return middleware.sendResponse(req, res, { error: error.message || error});
+        }
+    }
+
 
     //Vedio 
     async createVedios(req, res){
@@ -199,7 +216,24 @@ class AdminController {
             
         }
     }
-    
+
+
+    async changeVideoStatus(req, res){
+        try{
+            let requestData = req.body;
+            let validationStatus = validationRule.statusValidation
+            let {error, value} = validationStatus.validate(requestData)
+            if(error){
+                return middleware.sendResponse(req, res, { error: error.message || error});
+            }
+            requestData.table = "tbl_vedios"
+            requestData.id = req.params.id
+            let message = await adminModel.changeStatus(requestData)
+            return middleware.sendResponse(req, res, message)
+        }catch(error){
+            return middleware.sendResponse(req, res, { error: error.message || error});
+        }
+    }
     async createProcess(req, res){
         try{
             let requestData = req.body;
@@ -265,6 +299,22 @@ class AdminController {
         }
     }
 
+    async changesProcessStatus(req, res){
+        try{
+            let requestData = req.body;
+            let validationStatus = validationRule.statusValidation
+            let {error, value} = validationStatus.validate(requestData)
+            if(error){
+                return middleware.sendResponse(req, res, { error: error.message || error});
+            }
+            requestData.table = "tbl_process"
+            requestData.id = req.params.id
+            let message = await adminModel.changeStatus(requestData)
+            return middleware.sendResponse(req, res, message)
+        }catch(error){
+            return middleware.sendResponse(req, res, { error: error.message || error});
+        }
+    }
 
     //Reviews
 
@@ -334,6 +384,23 @@ class AdminController {
         }
     }
 
+    async changeReviewsStatus(req, res){
+        try{
+            let requestData = req.body;
+            let validationStatus = validationRule.statusValidation
+            let {error, value} = validationStatus.validate(requestData)
+            if(error){
+                return middleware.sendResponse(req, res, { error: error.message || error});
+            }
+            requestData.table = "tbl_testimonials"
+            requestData.id = req.params.id
+            let message = await adminModel.changeStatus(requestData)
+            return middleware.sendResponse(req, res, message)
+        }catch(error){
+            return middleware.sendResponse(req, res, { error: error.message || error});
+        }
+    }
+
     //Journal Category
 
     async createJournalCategory(req, res){
@@ -391,6 +458,23 @@ class AdminController {
             let requestData = {}
             requestData.id = req.params.id
             let message = await adminModel.deleteJournalCategory(requestData)
+            return middleware.sendResponse(req, res, message)
+        }catch(error){
+            return middleware.sendResponse(req, res, { error: error.message || error});
+        }
+    }
+
+    async changeJournalCategoryStatus(req, res){
+        try{
+            let requestData = req.body;
+            let validationStatus = validationRule.statusValidation
+            let {error, value} = validationStatus.validate(requestData)
+            if(error){
+                return middleware.sendResponse(req, res, { error: error.message || error});
+            }
+            requestData.table = "tbl_journal_category"
+            requestData.id = req.params.id
+            let message = await adminModel.changeStatus(requestData)
             return middleware.sendResponse(req, res, message)
         }catch(error){
             return middleware.sendResponse(req, res, { error: error.message || error});
@@ -459,6 +543,23 @@ class AdminController {
         }
     }
 
+    async changeJournalStatus(req, res){
+        try{
+            let requestData = req.body;
+            let validationStatus = validationRule.statusValidation
+            let {error, value} = validationStatus.validate(requestData)
+            if(error){
+                return middleware.sendResponse(req, res, { error: error.message || error});
+            }
+            requestData.table = "tbl_journal"
+            requestData.id = req.params.id
+            let message = await adminModel.changeStatus(requestData)
+            return middleware.sendResponse(req, res, message)
+        }catch(error){
+            return middleware.sendResponse(req, res, { error: error.message || error});
+        }
+    }
+
     //Reels Category
 
     async createReelsCategory(req, res){
@@ -519,6 +620,22 @@ class AdminController {
             return middleware.sendResponse(req, res, { error: error.message || error});
         }
     }
+    async changeReelsCategoryStatus(req, res){
+        try{
+            let requestData = req.body;
+            let validationStatus = validationRule.statusValidation
+            let {error, value} = validationStatus.validate(requestData)
+            if(error){
+                return middleware.sendResponse(req, res, { error: error.message || error});
+            }
+            requestData.table = "tbl_reel_category"
+            requestData.id = req.params.id
+            let message = await adminModel.changeStatus(requestData)
+            return middleware.sendResponse(req, res, message)
+        }catch(error){
+            return middleware.sendResponse(req, res, { error: error.message || error});
+        }
+    }
 
     async createReels(req, res){
         try{
@@ -574,6 +691,23 @@ class AdminController {
             let requestData = {}
             requestData.id = req.params.id
             let message = await adminModel.deleteReels(requestData)
+            return middleware.sendResponse(req, res, message)
+        }catch(error){
+            return middleware.sendResponse(req, res, { error: error.message || error});
+        }
+    }
+
+    async changeReelsStatus(req, res){
+        try{
+            let requestData = req.body;
+            let validationStatus = validationRule.statusValidation
+            let {error, value} = validationStatus.validate(requestData)
+            if(error){
+                return middleware.sendResponse(req, res, { error: error.message || error});
+            }
+            requestData.table = "tbl_reels"
+            requestData.id = req.params.id
+            let message = await adminModel.changeStatus(requestData)
             return middleware.sendResponse(req, res, message)
         }catch(error){
             return middleware.sendResponse(req, res, { error: error.message || error});

@@ -13,6 +13,10 @@ const enableDisableTagValidation = Joi.object({
   status : Joi.boolean().required()  
 })
 
+const statusValidation = Joi.object({
+    is_active : Joi.boolean().required()
+})
+
 const vediosValidation = Joi.object({
     title : Joi.string().min(8).required(),
     name : Joi.string().min(3).required(),
