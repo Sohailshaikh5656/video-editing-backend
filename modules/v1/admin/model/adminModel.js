@@ -1178,6 +1178,37 @@ class AdminModel {
       };
     }
   }
+
+  async changeStatus(requestData){
+    try {
+      let data = {
+        is_active: requestData.is_active,
+      };
+
+      let query = `UPDATE ${requestData.table} SET ? WHERE id = ?`;
+      let [result] = await database.query(query, [data, requestData.id]);
+
+      if (result.affectedRows <= 0) {
+        return {
+          code: responseCode.OPERATION_FAILED,
+          keyword: "something_went_wrong",
+          data: null,
+        };
+      }
+
+      return {
+        code: responseCode.SUCCESS,
+        keyword: "status_changed_successfully",
+        data: result,
+      };
+    } catch (error) {
+      return {
+        code: responseCode.OPERATION_FAILED,
+        keyword: "something_went_wrong",
+        data: error.message || error,
+      };
+    }
+  }
 }
 
 module.exports = new AdminModel();
