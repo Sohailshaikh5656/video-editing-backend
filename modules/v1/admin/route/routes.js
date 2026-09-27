@@ -61,7 +61,7 @@ const adminRoute = (app)=>{
     app.get("/v1/admin/journal/search/:search",adminInstance.getJournal);
     app.put("/v1/admin/journal/:id",adminInstance.updateJournal);
     app.delete("/v1/admin/journal/:id",adminInstance.deleteJournal);
-    app.put("/v1/admin/journal/status",adminInstance.changeJournalStatus);
+    app.put("/v1/admin/journal/status/:id",adminInstance.changeJournalStatus);
     
     //Reels Category
     app.post("/v1/admin/reels/category",adminInstance.createReelsCategory);
