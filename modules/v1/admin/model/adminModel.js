@@ -295,64 +295,77 @@ class AdminModel {
   }
 
   async getAllVedios(requestData) {
-    try {
-      // Build base query
-      let query = `SELECT v.*, (
-        SELECT GROUP_CONCAT(vt.tags SEPARATOR ', ')
-        FROM tbl_vedio_tags AS vt
-        INNER JOIN tbl_vedio_tag_junction AS vtj ON vtj.vedio_tag_id = vt.id
-        WHERE vtj.vedio_id = v.id
+  try {
+    let query = `
+      SELECT 
+        v.*,
+        (
+          SELECT GROUP_CONCAT(vt.tags SEPARATOR ', ')
+          FROM tbl_vedio_tags AS vt
+          INNER JOIN tbl_vedio_tag_junction AS vtj 
+            ON vtj.vedio_tag_id = vt.id
+          WHERE vtj.vedio_id = v.id
         ) AS category
-        FROM tbl_vedios AS v
-        WHERE is_deleted = 0`;
+      FROM tbl_vedios AS v
+      WHERE v.is_deleted = 0
+    `;
 
-      // If specific id, add as filter
-      if (requestData.id) {
-        query += ` AND v.id = ${database.escape(requestData.id)}`;
-      }
+    if (requestData.id) {
+      query += ` AND v.id = ${database.escape(requestData.id)}`;
+    }
 
-      // If search, add to where clause
-      if (requestData.search) {
-        let searchEscaped = database.escape("%" + requestData.search + "%");
-        query += ` AND (v.name LIKE ${searchEscaped} OR v.title LIKE ${searchEscaped})`;
-      }
+    if (requestData.search) {
+      const searchEscaped = database.escape(
+        `%${requestData.search}%`
+      );
 
-      // Order descending by created at/id (or fallback)
-      query += ` ORDER BY v.id DESC`;
+      query += `
+        AND (
+          v.name LIKE ${searchEscaped}
+          OR v.title LIKE ${searchEscaped}
+        )
+      `;
+    }
 
-      let [result] = await database.query(query);
-      console.log("Result : ", result);
+    query += ` ORDER BY v.id DESC`;
 
-      if (!Array.isArray(result) || result.length <= 0) {
-        return {
-          code: responseCode.NOT_FOUND,
-          keyword: "no_vedios_found",
-          data: [],
-        };
-      }
+    let [result] = await database.query(query);
 
-      result = result.map((item) => {
-        return {
-          ...item,
-          category: item.category.split(",").map((cat) => cat.trim()),
-        };
-      });
+    console.log("Result : ", result);
 
+    if (!Array.isArray(result) || result.length <= 0) {
       return {
-        code: responseCode.SUCCESS,
-        keyword: "vedios_fetched_successfully",
-        data: result,
-      };
-    } catch (error) {
-      // Return error message only, not the whole error object, to avoid circular structure error
-      console.log(error);
-      return {
-        code: responseCode.OPERATION_FAILED,
-        keyword: "something_went_wrong",
-        error: error.message || "Unknown error",
+        code: responseCode.NOT_FOUND,
+        keyword: "no_vedios_found",
+        data: [],
       };
     }
+
+    result = result.map((item) => {
+      return {
+        ...item,
+        category: item.category
+          ? item.category.split(",").map((cat) => cat.trim())
+          : [],
+      };
+    });
+
+    return {
+      code: responseCode.SUCCESS,
+      keyword: "vedios_fetched_successfully",
+      data: result,
+    };
+
+  } catch (error) {
+    console.log(error);
+
+    return {
+      code: responseCode.OPERATION_FAILED,
+      keyword: "something_went_wrong",
+      error: error.message || "Unknown error",
+    };
   }
+}
   async updateVedios(requestData) {
     try {
       let vedios = {
