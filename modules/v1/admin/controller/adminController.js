@@ -726,7 +726,7 @@ class AdminController {
     
     async createBrand(req, res){
         try{
-            let requestData = res.body
+            let requestData = req.body
             let brandValidation = validationRule.brandValidation
             let {error, value} = brandValidation.validate(requestData)
             if(error){
@@ -757,7 +757,7 @@ class AdminController {
     
     async updateBrand(req, res){
         try{
-            let requestData = res.body
+            let requestData = req.body
             let brandValidation = validationRule.brandValidation
             let {error, value} = brandValidation.validate(requestData)
             if(error){
