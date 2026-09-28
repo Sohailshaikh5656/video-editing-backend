@@ -5,6 +5,8 @@ const cors = require("cors")
 const multer = require("multer")
 const app = express()
 const path = require('path');
+const database = require("./configure/database")
+
 app.use(express.json()) //Comment if Cloudnairy
 dotenv.config()
 app.use(cors({
@@ -44,6 +46,16 @@ app.use(require('./middleware/validation').validateApiKey);
 let app_routing = require("./modules/app_routing")
 app_routing.v1(app)
 app.use("/uploads",express.static(path.join(__dirname,'uploads')));
+
+async function checkDatabaseHealth(){
+    try{
+        await database.query(`SELECT 1`);
+        console.error(`[DB] ${new Date().toISOString()} : connected `.bgCyan)
+    }catch(error){
+        console.error(`[DB] Connection Failed : ${error}`.bgRed)
+    }
+}
+setInterval(checkDatabaseHealth, 5*60*1000)
 try{
     app.listen(process.env.PORT || 3300,"0.0.0.0",()=>{ //Network
     // app.listen(process.env.PORT || 3300,()=>{ //Localhost

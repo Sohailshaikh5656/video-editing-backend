@@ -720,8 +720,82 @@ class AdminController {
             let message = await adminModel.getInquiry()
             return middleware.sendResponse(req, res, message)
         }catch(error){
-            console.log("Lund Error :",error)
             return middleware.sendResponse(req, res, { error : error.message || error })
+        }
+    }
+    
+    async createBrand(req, res){
+        try{
+            let requestData = res.body
+            let brandValidation = validationRule.brandValidation
+            let {error, value} = brandValidation.validate(requestData)
+            if(error){
+                return middleware.sendResponse(req, res, { error: error.message || error});
+            }
+            let message = await adminModel.createBrand(requestData)
+            return middleware.sendResponse(req, res, message)
+        }catch(error){
+            return middleware.sendResponse(req, res, { error : error.message || error })
+        }
+    }
+
+    async getBrands(req, res){
+        try{
+            let requestData = {}
+            if(req.params?.id){
+                requestData.id = req.params.id
+            }
+            if(req.params?.search){
+                requestData.search = req.params.search
+            }
+            let message = await adminModel.getBrands(requestData)
+            return middleware.sendResponse(req, res, message);
+        }catch(error){
+            return middleware.sendResponse(req, res, { error: error.message || error});
+        }
+    }
+    
+    async updateBrand(req, res){
+        try{
+            let requestData = res.body
+            let brandValidation = validationRule.brandValidation
+            let {error, value} = brandValidation.validate(requestData)
+            if(error){
+                return middleware.sendResponse(req, res, { error: error.message || error});
+            }
+            requestData.id = req.params.id
+            let message = await adminModel.createBrand(requestData)
+            return middleware.sendResponse(req, res, message)
+        }catch(error){
+            return middleware.sendResponse(req, res, { error : error.message || error })
+        }
+    }
+
+    async deleteBrand(req, res){
+        try{
+            let requestData = {}
+            requestData.id = req.params.id
+            let message = await adminModel.deleteBrand(requestData)
+            return middleware.sendResponse(req, res, message)
+        }catch(error){
+            return middleware.sendResponse(req, res, { error: error.message || error});
+        }
+    }
+
+    async changeBrandStatus(req, res){
+        try{
+            let requestData = req.body;
+            let validationStatus = validationRule.statusValidation
+            let {error, value} = validationStatus.validate(requestData)
+            if(error){
+                return middleware.sendResponse(req, res, { error: error.message || error});
+            }
+            requestData.table = "tbl_brand"
+            requestData.id = req.params.id
+            let message = await adminModel.changeStatus(requestData)
+            return middleware.sendResponse(req, res, message)
+        }catch(error){
+            return middleware.sendResponse(req, res, { error: error.message || error});
         }
     }
 }

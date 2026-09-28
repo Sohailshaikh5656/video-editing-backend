@@ -12,6 +12,7 @@ const userRoute = (app)=>{
     app.get("/v1/user/reels/category",userInstance.getReelsCategory);
     app.get("/v1/user/reels",userInstance.getReels);
     app.post("/v1/user/createInquiry",userInstance.createContact);
+    app.post("/v1/user/getBrand",userInstance.getBrands);
 
 }
 

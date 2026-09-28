@@ -360,6 +360,30 @@ class UserModel {
       };
     }
   }
+
+   async getBrands(requestData) {
+    try {
+      let query = `SELECT * FROM tbl_brand WHERE is_deleted = 0 AND is_active = 1`;
+      if (requestData.id) {
+        query += ` AND id = ${requestData.id}`;
+      }
+      if (requestData.search) {
+        query += ` AND name LIKE '%${requestData.search}%'`;
+      }
+      let [result] = await database.query(query);
+      return {
+        code: responseCode.SUCCESS,
+        keyword: "brands_fetched_successfully",
+        data: result,
+      };
+    } catch (error) {
+      return {
+        code: responseCode.OPERATION_FAILED,
+        keyword: "something_went_wrong",
+        data: error,
+      };
+    }
+  }
 }
 
 module.exports = new UserModel();

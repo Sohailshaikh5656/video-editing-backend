@@ -118,6 +118,22 @@ class UserController{
         }   
 
     }
+
+     async getBrands(req, res){
+        try{
+            let requestData = {}
+            if(req.params?.id){
+                requestData.id = req.params.id
+            }
+            if(req.params?.search){
+                requestData.search = req.params.search
+            }
+            let message = await userModel.getBrands(requestData)
+            return middleware.sendResponse(req, res, message);
+        }catch(error){
+            return middleware.sendResponse(req, res, { error: error.message || error});
+        }
+    }
     
 }
 

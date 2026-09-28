@@ -81,6 +81,15 @@ const adminRoute = (app)=>{
     app.delete("/v1/admin/reels/:id",adminInstance.deleteReels);
     app.put("/v1/admin/reels/status/:id",adminInstance.changeReelsStatus);
 
+    //Brands
+    app.post("/v1/admin/brand",adminInstance.createBrand);
+    app.get("/v1/admin/brand",adminInstance.getBrands);
+    app.get("/v1/admin/brand/:id",adminInstance.getBrands);
+    app.get("/v1/admin/brand/search/:search",adminInstance.getBrands);
+    app.put("/v1/admin/brand/:id",adminInstance.updateBrand);
+    app.delete("/v1/admin/brand/:id",adminInstance.deleteBrand);
+    app.put("/v1/admin/brand/status/:id",adminInstance.changeBrandStatus);
+
     app.get("/v1/admin/inquiry",adminInstance.getInquiry);
 
 }
