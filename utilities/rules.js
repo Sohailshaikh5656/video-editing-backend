@@ -88,6 +88,11 @@ const inquiryValidation = Joi.object({
     footage_url : Joi.string().required(),
     booking_time : Joi.string().required(),
 })
+
+const brandValidation = Joi.object({
+    name : Joi.string().min(3).required(),
+    image_url : Joi.string().required()
+})
 module.exports = {
     adminValidation,
     createVedioTagValidation,
@@ -100,5 +105,6 @@ module.exports = {
     reelsValidation,
     reelsCategoryValidation,
     inquiryValidation, 
-    statusValidation
+    statusValidation,
+    brandValidation
 }

@@ -1222,6 +1222,104 @@ class AdminModel {
       };
     }
   }
+
+  async createBrand(requestData){
+    try{
+      let data = {
+        name : requestData.name,
+        image_url : requestData.image_url
+      }
+
+      let [result] = await database.query(`INSERT into tbl_brand SET ?`, data)
+      if(result.affectedRows <= 0){
+        return {
+          code: responseCode.OPERATION_FAILED,
+          keyword: "unable_to_create_reels",
+          data: null,
+        };
+      }
+      return {
+        code: responseCode.SUCCESS,
+        keyword: "brand_created_successfully",
+        data: null,
+      };
+    }catch(error){
+      return {
+        code: responseCode.OPERATION_FAILED,
+        keyword: "something_went_wrong",
+        data: error.message || error,
+      };
+    }
+  }
+
+  async getBrands(requestData) {
+    try {
+      let query = `SELECT * FROM tbl_brand WHERE is_deleted = 0`;
+      if (requestData.id) {
+        query += ` AND id = ${requestData.id}`;
+      }
+      if (requestData.search) {
+        query += ` AND name LIKE '%${requestData.search}%'`;
+      }
+      let [result] = await database.query(query);
+      return {
+        code: responseCode.SUCCESS,
+        keyword: "brands_fetched_successfully",
+        data: result,
+      };
+    } catch (error) {
+      return {
+        code: responseCode.OPERATION_FAILED,
+        keyword: "something_went_wrong",
+        data: error,
+      };
+    }
+  }
+
+   async updateReels(requestData) {
+    try {
+      let data = {
+        name: requestData.name,
+        image_url : requestData.image_url
+      };
+      let [result] = await database.query(
+        `UPDATE tbl_brand SET ? WHERE id = ?`,
+        [data, requestData.id],
+      );
+      return {
+        code: responseCode.SUCCESS,
+        keyword: "brand_updated_successfully",
+        data: null,
+      };
+    } catch (error) {
+      return {
+        code: responseCode.OPERATION_FAILED,
+        keyword: "something_went_wrong",
+        data: error,
+      };
+    }
+  }
+
+  async deleteBrand(requestData) {
+    try {
+      let [result] = await database.query(
+        `UPDATE tbl_brand SET is_deleted = 1 WHERE id = ?`,
+        [requestData.id],
+      );
+      return {
+        code: responseCode.SUCCESS,
+        keyword: "reels_deleted_successfully",
+        data: null,
+      };
+    } catch (error) {
+      return {
+        code: responseCode.OPERATION_FAILED,
+        keyword: "something_went_wrong",
+        data: error,
+      };
+    }
+  }
+
 }
 
 module.exports = new AdminModel();
