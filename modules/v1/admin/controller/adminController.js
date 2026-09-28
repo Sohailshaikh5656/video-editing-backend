@@ -764,7 +764,7 @@ class AdminController {
                 return middleware.sendResponse(req, res, { error: error.message || error});
             }
             requestData.id = req.params.id
-            let message = await adminModel.createBrand(requestData)
+            let message = await adminModel.updateBrand(requestData)
             return middleware.sendResponse(req, res, message)
         }catch(error){
             return middleware.sendResponse(req, res, { error : error.message || error })

@@ -1276,7 +1276,7 @@ class AdminModel {
     }
   }
 
-   async updateReels(requestData) {
+   async updateBrand(requestData) {
     try {
       let data = {
         name: requestData.name,
