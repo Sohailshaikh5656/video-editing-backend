@@ -1,81 +1,83 @@
-const express = require("express")
-const dotenv = require("dotenv")
-const colors = require("colors")
-const cors = require("cors")
-const multer = require("multer")
-const app = express()
-const path = require('path');
-const database = require("./configure/database")
+const express = require("express");
+const dotenv = require("dotenv");
+const colors = require("colors");
+const cors = require("cors");
+const multer = require("multer");
+const path = require("path");
 
-app.use(express.json()) //Comment if Cloudnairy
-dotenv.config()
-app.use(cors({
-    // origin: ['http://localhost:3000', 'http://127.0.0.1:3000'],
-    origin: "*",
-}));
+dotenv.config();
 
+const app = express();
+const database = require("./configure/database");
+
+app.use(express.json()); // Comment if Cloudinary
+app.use(cors({ origin: "*" }));
+
+// =========================
+// HEALTH CHECK (public, before auth middleware)
+// =========================
 app.get("/health", async (req, res) => {
+    let conn;
     try {
-        await database.query("SELECT 1");
+        conn = await Promise.race([
+            database.getConnection(),
+            new Promise((_, reject) =>
+                setTimeout(() => reject(new Error("DB connect timeout")), 8000)
+            ),
+        ]);
+        await conn.query("SELECT 1");
 
         res.status(200).json({
             status: "ok",
-            database: "connected"
+            database: "connected",
+            uptime: Math.round(process.uptime()),
+            time: new Date().toISOString(),
         });
     } catch (error) {
+        console.error(`[HEALTH] DB check failed: ${error.message}`.bgRed);
         res.status(500).json({
             status: "error",
-            database: "disconnected"
+            database: "disconnected",
+            time: new Date().toISOString(),
         });
+    } finally {
+        if (conn) conn.release();
     }
 });
-//For Cloudnariy to Convert Response in JOSN
-// const jsonParser = express.json({ limit: "50mb" });
-// const textParser = express.text({ limit: "50mb" });
 
-// app.use((req, res, next) => {
-//   const contentType = req.headers["content-type"] || "";
+// =========================
+// MIDDLEWARE
+// =========================
+app.use(require("./middleware/validation").validateHeaderToken);
+// app.use(require("./middleware/validation").extractHeaderLanguage);
+app.use(require("./middleware/validation").validateApiKey);
+// app.use(require("./middleware/validation").DecriptData);
 
-//   if (contentType.startsWith("text/plain")) {
-//     console.log("Text Plain Middleware Triggered");
-//     return textParser(req, res, next);
-//   }
+// =========================
+// ROUTES
+// =========================
+const app_routing = require("./modules/app_routing");
+app_routing.v1(app);
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-//   if (contentType.startsWith("application/json") || contentType.startsWith("multipart/form-data")) {
-//     console.log("JSON Middleware Triggered");
-//     return jsonParser(req, res, next);
-//   }
-
-//   return next();
-// });
-
-
-// cron.schedule("* * * * *", () => {
-    //   console.log("🚀 Cron Job Running every 1 minute...");
-    //   // yaha tu apna fetch + AI process call karega
-//     // });
-app.use(require('./middleware/validation').validateHeaderToken);
-// app.use(require('./middleware/validation').extractHeaderLanguage);
-app.use(require('./middleware/validation').validateApiKey);
-// app.use(require('./middleware/validation').DecriptData);
-let app_routing = require("./modules/app_routing")
-app_routing.v1(app)
-app.use("/uploads",express.static(path.join(__dirname,'uploads')));
-
-async function checkDatabaseHealth(){
-    try{
-        await database.query(`SELECT 1`);
-        console.error(`[DB] ${new Date().toISOString()} : connected `.bgCyan)
-    }catch(error){
-        console.error(`[DB] Connection Failed : ${error}`.bgRed)
+// =========================
+// IN-APP DB PING (only works while Render is awake;
+// the external cron is what keeps Render itself awake)
+// =========================
+async function checkDatabaseHealth() {
+    try {
+        await database.query("SELECT 1");
+        console.log(`[DB] ${new Date().toISOString()} : connected`.bgCyan);
+    } catch (error) {
+        console.error(`[DB] Connection Failed : ${error.message}`.bgRed);
     }
 }
-setInterval(checkDatabaseHealth, 5*60*1000)
-try{
-    app.listen(process.env.PORT || 3300,"0.0.0.0",()=>{ //Network
-    // app.listen(process.env.PORT || 3300,()=>{ //Localhost
-        console.log(`App Started on ${process.env.PORT || 3300} PORT`.bgGreen)
-    })
-}catch(error){
-    console.log(`Error in Server : ${error}`.bgRed.white)
-}
+setInterval(checkDatabaseHealth, 5 * 60 * 1000);
+
+// =========================
+// START SERVER
+// =========================
+const PORT = process.env.PORT || 3300;
+app.listen(PORT, "0.0.0.0", () => {
+    console.log(`App Started on ${PORT} PORT`.bgGreen);
+});

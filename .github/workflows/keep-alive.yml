@@ -1,0 +1,28 @@
+name: Keep Alive
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+jobs:
+  keep-alive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Power on Aiven if it is off
+        env:
+          AIVEN_TOKEN: ${{ secrets.AIVEN_TOKEN }}
+        run: |
+          URL="https://api.aiven.io/v1/project/shaikhsohail1131-b0d2/service/mysql-219b80d2"
+          STATE=$(curl -fsS -H "Authorization: aivenv1 $AIVEN_TOKEN" "$URL" | jq -r '.service.state')
+          echo "Aiven state: $STATE"
+          if [ "$STATE" = "POWEROFF" ]; then
+            curl -fsS -X PUT "$URL" \
+              -H "Authorization: aivenv1 $AIVEN_TOKEN" \
+              -H "Content-Type: application/json" \
+              -d '{"powered": true}'
+            echo "Power-on requested"
+          fi
+
+      - name: Ping backend health
+        run: curl -fsS --retry 3 --retry-delay 10 --max-time 90 https://video-editing-backend-6c7k.onrender.com/health
